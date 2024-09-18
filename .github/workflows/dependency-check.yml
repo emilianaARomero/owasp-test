@@ -2,7 +2,7 @@ name: OWASP Dependency Check
 "on":
   push:
     branches:
-      - main
+      - master
 jobs:
   owasp-scan:
     runs-on: ubuntu-latest
