@@ -27,7 +27,7 @@ jobs:
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         with:
-          args: "--project owasp-test --scan . --format HTML --out /github/workspace/report"
+          args: "--project owasp-test --scan . --format HTML --out /github/workspace/report --nvdApiKey $NVD_API_KEY"
           # args: |
           #   --scan /github/workspace
           #   --format HTML
