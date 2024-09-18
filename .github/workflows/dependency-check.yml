@@ -14,8 +14,6 @@ jobs:
         with:
           distribution: adopt
           java-version: "11"
-      - name: Set JAVA_HOME
-        run: echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))" >> $GITHUB_ENV
       - name: Run OWASP Dependency Check
         uses: "docker://owasp/dependency-check:latest"
         with:
@@ -24,6 +22,8 @@ jobs:
             --format HTML
             --project "My Project"
             --out /github/workspace/report
+          env:
+          JAVA_HOME: /opt/hostedtoolcache/Java_Adopt_jdk/11.0.24-8/x64
       - name: Upload OWASP Dependency Check report
         uses: actions/upload-artifact@v4
         with:
