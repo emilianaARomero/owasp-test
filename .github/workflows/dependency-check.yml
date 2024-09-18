@@ -14,6 +14,8 @@ jobs:
         with:
           distribution: adopt
           java-version: "11"
+      - name: Set JAVA_HOME
+        run: echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))" >> $GITHUB_ENV
       - name: Run OWASP Dependency Check
         uses: "docker://owasp/dependency-check:latest"
         with:
