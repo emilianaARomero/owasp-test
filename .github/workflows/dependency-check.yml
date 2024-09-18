@@ -1,36 +1,33 @@
 name: OWASP Dependency Check
-"on":
+
+on:
   push:
     branches:
       - master
+
 jobs:
   owasp-scan:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-      # - name: Setup Java
-      #   uses: actions/setup-java@v4
-      #   with:
-      #     distribution: adopt
-      #     java-version: "11"
+        uses: actions/checkout@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+
       - name: Install dependencies
         run: npm install
+
+      - name: Create report directory
+        run: mkdir -p report
+
       - name: Run OWASP Dependency Check
-        uses: docker://owasp/dependency-check:latest
-        env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+        uses: docker://owasp/dependency-check:8.0.1
         with:
           args: "--project owasp-test --scan . --format HTML --out /github/workspace/report"
-          # args: |
-          #   --scan /github/workspace
-          #   --format HTML
-          #   --project "My Project"
-          #   --out /github/workspace/report
+
       - name: Upload OWASP Dependency Check report
         uses: actions/upload-artifact@v4
         with:
