@@ -22,8 +22,10 @@ jobs:
         run: npm install
       - name: Run OWASP Dependency Check
         uses: docker://owasp/dependency-check:latest
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         with:
-          args: "--project My Project --scan . --format HTML --out /github/workspace/report"
+          args: "--project owasp-test --scan . --format HTML --out /github/workspace/report"
           # args: |
           #   --scan /github/workspace
           #   --format HTML
