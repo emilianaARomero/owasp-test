@@ -21,8 +21,11 @@ jobs:
         uses: docker://owasp/dependency-check:latest
         with:
           args: "--project owasp-test --scan . --format HTML --out /report --nvdApiKey ${{ secrets.NVD_API_KEY }}"
+        run: |
+          docker run -v $(pwd)/report:/report owasp/dependency-check:latest \
+          --project owasp-test --scan . --format HTML --out /report --nvdApiKey ${{ secrets.NVD_API_KEY }}
       - name: Upload OWASP Dependency Check report
         uses: actions/upload-artifact@v4
         with:
           name: dependency-check-report
-          path: /report
+          path: report
