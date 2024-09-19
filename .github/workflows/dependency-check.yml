@@ -14,13 +14,15 @@ jobs:
         with:
           node-version: "18"
       - name: Install dependencies
-        run: npm install
+        run: npm install  
+      - name: Create report directory
+        run: mkdir -p report
       - name: Run OWASP Dependency Check
         uses: docker://owasp/dependency-check:latest
         with:
-          args: "--project owasp-test --scan . --format HTML --out /dependency-check-report.html --nvdApiKey ${{ secrets.NVD_API_KEY }}"
+          args: "--project owasp-test --scan . --format HTML --out /report --nvdApiKey ${{ secrets.NVD_API_KEY }}"
       - name: Upload OWASP Dependency Check report
         uses: actions/upload-artifact@v4
         with:
           name: dependency-check-report
-          path: dependency-check-report.html
+          path: report
