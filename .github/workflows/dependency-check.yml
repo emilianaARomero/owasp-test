@@ -19,9 +19,8 @@ jobs:
         run: |
           ./dependency-check/bin/dependency-check.sh --out report.html --scan .
           rm -rf dependency-check*
-
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3  # Updated to version v3
         with:
           name: artifacts
           path: report.html
