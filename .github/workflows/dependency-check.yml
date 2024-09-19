@@ -29,7 +29,7 @@ jobs:
 
       - name: Run Dependency Check
         run: |
-          ./dependency-check/bin/dependency-check.sh --out report.html --scan . --nvdApiKey "${{ secrets.NVD_API_KEY }}"
+          ./dependency-check/bin/dependency-check.sh --out report.html --scan . --exclude "./dependency-check" --nvdApiKey "${{ secrets.NVD_API_KEY }}"
         env:
           JAVA_OPTS: '-Xmx4G'
 
