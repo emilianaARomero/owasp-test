@@ -1,28 +1,42 @@
 name: OWASP Dependency Check
-"on":
+
+on:
   push:
     branches:
       - master
+
 jobs:
   owasp-scan:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+
       - name: Install dependencies
-        run: npm install  
+        run: npm install
+
       - name: Create report directory
         run: mkdir -p report
+
       - name: Run OWASP Dependency Check
-        uses: docker://owasp/dependency-check:latest
-        with:
-          args: "--project owasp-test --scan . --format HTML --out /report --nvdApiKey ${{ secrets.NVD_API_KEY }}"
-      - name: List report files
-        run: ls -la /report
+        run: |
+          docker run --rm \
+            --user $(id -u):$(id -g) \
+            -v $(pwd):/src \
+            -v $(pwd)/report:/report \
+            owasp/dependency-check:latest \
+            --project "owasp-test" \
+            --scan /src \
+            --format "HTML" \
+            --out /report \
+            --nvdApiKey "${{ secrets.NVD_API_KEY }}" \
+            --failOnCVSS 100
+
       - name: Upload OWASP Dependency Check report
         uses: actions/upload-artifact@v4
         with:
