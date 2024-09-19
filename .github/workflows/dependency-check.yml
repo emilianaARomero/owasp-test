@@ -24,16 +24,20 @@ jobs:
       - name: Download OWASP Dependency Check
         run: |
           VERSION=$(curl -s https://jeremylong.github.io/DependencyCheck/current.txt)
-          curl -sL "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
-          unzip dependency-check.zip
+          mkdir -p /tmp/dependency-check
+          curl -sL "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output /tmp/dependency-check.zip
+          unzip /tmp/dependency-check.zip -d /tmp/dependency-check
 
       - name: Run Dependency Check
         run: |
-          ./dependency-check/bin/dependency-check.sh --out report.html --scan . --exclude "./dependency-check" --nvdApiKey "${{ secrets.NVD_API_KEY }}"
+          /tmp/dependency-check/dependency-check/bin/dependency-check.sh \
+            --out report.html \
+            --scan $(pwd) \
+            --nvdApiKey "${{ secrets.NVD_API_KEY }}"
         env:
           JAVA_OPTS: '-Xmx4G'
 
-      - name: Upload Artifacts
+      - name: Upload Dependency-Check Report
         uses: actions/upload-artifact@v4
         with:
           name: dependency-check-report
